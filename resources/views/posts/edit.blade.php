@@ -10,10 +10,16 @@
             <div class="mb-3">
                 <label for="title" class="form-label">Title</label>
                 <input type="text" class="form-control" id="title" name="title" emailHelp" value="{{$post['title']}}">
+                @if($errors->has('title'))
+                       <div class="error alert alert-danger mt-1 p-1">{{ $errors->first('title') }}</div>
+                 @endif
             </div>
             <div class="mb-3">
                 <label for="description" class="form-label">Description</label>
                 <textarea class="form-control" name="description" >{{$post['description']}}</textarea>
+                @if($errors->has('description'))
+                       <div class="error alert alert-danger mt-1 p-1">{{ $errors->first('description') }}</div>
+                 @endif
             </div>
 
             <div class="mb-3">

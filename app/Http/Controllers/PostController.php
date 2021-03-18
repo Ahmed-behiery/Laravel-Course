@@ -6,6 +6,10 @@ use Carbon\Carbon;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\StorePostRequest;
+use Illuminate\Support\Facades\DB;
+
+
 
 class PostController extends Controller
 {
@@ -40,22 +44,11 @@ class PostController extends Controller
         ]);
     }
 
-    public function store(Request $myRequestObject)
+    public function store(StorePostRequest $myRequestObject)
     {
         $data = $myRequestObject->all();
-        //$data = request()->all();
-        // request()->title == $data['title']
-
+        
         Post::create($data);
-
-        // Post::create($myRequestObject->all());
-
-        // Post::create([
-        //     'title' => $data['title'],
-        //     'description' => $data['description'],
-        //     'id' => 1, //those will be ignore cause they aren't in fillable
-        //     'ajsnhdoiqwjsd' => 'aikoshdiahsdui' //those will be ignore cause they aren't in fillable
-        // ]);
 
         return redirect()->route('posts.index');
     }
@@ -68,15 +61,16 @@ class PostController extends Controller
         ]);
     }
 
-    public function update($post, Request $myRequestObject)
+    public function update($post, StorePostRequest $myRequestObject)
     {
-        // $data = $myRequestObject->all();
-        //dd($data);
-        Post::find($post)->update($myRequestObject->all());
-       
-        
-        return redirect()->route('posts.index');
-        // return view('posts.index');
+        $data = $myRequestObject->all();
+        $affected = DB::table('posts')
+              ->where('id', $post)
+              ->update([
+                  'title' => $data['title'],
+                  'description' => $data['description']
+                  ]);
+         return redirect()->route('posts.index');
     }
 
     public function destroy($post)
