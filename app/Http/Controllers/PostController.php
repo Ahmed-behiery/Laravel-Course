@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+// use Cviebrock\EloquentSluggable\Services\SlugServices;
+use Cviebrock\EloquentSluggable\Services\SlugService;
+// use Cviebrock\EloquentSluggable\Sluggable;
+
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -13,6 +17,8 @@ use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
+
+
     public function index()
     {
         $posts = Post::paginate(2);
@@ -25,7 +31,12 @@ class PostController extends Controller
 
     public function show($post)
     {
+
         $post = Post::find($post);
+
+        $post->slug = SlugService::createSlug(Post::class, 'slug', $post->title);
+
+
         // $post = Post::where('title', 'Javascript')->first(); //this makes limit 1 and returns first result  select * from posts where title = 'Javascript' limit 1;
         // $postsWithTitle = Post::where('title', 'Javascript')->get(); //this gets all results select * from posts where title = 'Javascript';
         $dt = Carbon::parse($post['cerated_at'],'UTC');
